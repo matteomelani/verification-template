@@ -1,0 +1,8 @@
+This project uses a verification-first engineering methodology. Before doing any substantive work, read .verification/_meta/PROMPT.md — it is the operating contract.
+
+Also check:
+- .verification/MODE.md for the current project mode (spike | product | infrastructure)
+- .verification/_meta/SCHEMA.md for file format references
+- .verification/INVARIANTS.md for the project's "must never" list
+
+The .verification/ folder is the source of truth for verification methodology. Edit the methodology by editing files in .verification/, not by editing this file.
