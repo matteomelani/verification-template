@@ -1,4 +1,4 @@
-spike
+infrastructure
 
 # Valid values: spike | product | infrastructure
 #

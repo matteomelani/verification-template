@@ -16,22 +16,58 @@ All the tool-pointer files at the root say the same thing: *read `.verification/
 
 ## How to use this template
 
-### To start a new project
+### Option 1 — curl | bash (recommended)
 
-1. Clone or copy this repo into your new project directory:
-   ```bash
-   cp -r verification-template/.verification path/to/your/project/
-   cp verification-template/CLAUDE.md verification-template/AGENTS.md verification-template/.cursorrules path/to/your/project/
-   mkdir -p path/to/your/project/.github
-   cp verification-template/.github/copilot-instructions.md path/to/your/project/.github/
-   ```
-2. Edit `.verification/MODE.md` to set the project mode (`spike`, `product`, or `infrastructure`).
-3. Delete the example files (`contracts/0001-example-*.md`, `decisions/0001-example-*.md`) — they exist only to demonstrate the schema.
-4. Commit. Your project is now under verification-first methodology.
+Run this in your project's root directory:
 
-### To use this template on an existing project
+```bash
+curl -fsSL https://raw.githubusercontent.com/matteomelani/verification-template/main/install.sh | bash
+```
 
-Same as above, but be aware: applying this methodology to an existing codebase means the LLM will surface a lot of unstated contracts. That's good — it's a forcing function for documenting institutional knowledge — but it takes time. Consider starting in `spike` mode and promoting to `product` once the contract list stabilizes.
+The script will:
+- Check that the directory exists, is writable, and is inside a git repo
+- Prompt before overwriting any existing `.verification/` folder
+- Copy all required files into your project
+- Delete the example contract and ADR (they exist only to demonstrate the schema)
+- Prompt you to choose a mode (`spike`, `product`, or `infrastructure`)
+- Print what was installed and what to do next
+
+### Option 2 — manual clone
+
+Clone the repo locally, inspect the script, then run it:
+
+```bash
+git clone https://github.com/matteomelani/verification-template.git
+./verification-template/install.sh /path/to/your/project
+```
+
+### Option 3 — manual copy (fallback)
+
+If you prefer not to run a script:
+
+```bash
+cp -r verification-template/.verification path/to/your/project/
+cp verification-template/CLAUDE.md verification-template/AGENTS.md verification-template/.cursorrules path/to/your/project/
+mkdir -p path/to/your/project/.github
+cp verification-template/.github/copilot-instructions.md path/to/your/project/.github/
+```
+
+Then manually edit `.verification/MODE.md` to set the project mode, and delete the example files (`contracts/0001-example-*.md`, `decisions/0001-example-*.md`).
+
+---
+
+After any installation method, commit the added files:
+
+```bash
+git add .verification CLAUDE.md AGENTS.md .cursorrules .github/copilot-instructions.md
+git commit -m "add verification-first framework"
+```
+
+Your project is now under verification-first methodology.
+
+### Applying to an existing project
+
+Applying this methodology to an existing codebase means the LLM will surface a lot of unstated contracts. That's good — it's a forcing function for documenting institutional knowledge — but it takes time. Consider starting in `spike` mode and promoting to `product` once the contract list stabilizes.
 
 ### To evolve the methodology
 
