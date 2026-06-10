@@ -56,7 +56,10 @@ Per-mode overrides for thresholds and rules. Optional — if absent, defaults fr
 
 ## File: `INVARIANTS.md`
 
-The canonical list of project-level invariants. These are the things the system must *never* do. They are typically derived from the union of all `high` criticality contracts, but may also include cross-cutting rules.
+The canonical list of project-level invariants. These are system-wide
+guarantees the system must always hold or must never violate. They are
+typically derived from the union of all `high` criticality contracts, but may
+also include cross-cutting rules.
 
 **Structure:**
 

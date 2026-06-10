@@ -73,6 +73,48 @@ Applying this methodology to an existing codebase means the LLM will surface a l
 
 The methodology is itself versioned in `.verification/`. If you find a case where it produces bad outcomes, propose an edit to `_meta/PROMPT.md` or `_meta/SCHEMA.md`, document the change as an ADR, and improve the template by upstreaming your fix.
 
+## Example workflow
+
+This is the day-to-day loop once the framework is installed. The example is a
+single feature, but the same loop applies to any unit of work.
+
+Say the next task is "add a CSV export to the reports page."
+
+1. **Rationalize the task.** Read it against the existing code, design, and
+   data before writing anything. Ask: does it duplicate an existing pattern,
+   conflict with current behavior, or touch anything risky? Write the answer
+   down. This step decides what the contracts should be.
+
+2. **Write the invariants as contracts.** Create one or more
+   `contracts/NNNN-slug.md` files. Reuse standing contracts where they apply
+   (for example, an existing "all exports stream, never buffer in memory"
+   contract). Add a feature-specific contract for anything new (for example,
+   "the CSV export must match the on-screen report row for row").
+
+3. **Score each contract and choose how it is checked.** Fill in the
+   scorecard. In `Verification.Method`, mark each contract as a deterministic
+   check (`unit`, `integration`, `property`) or a judged one (`eval`). Prefer
+   deterministic checks; reserve `eval` for genuinely semantic guarantees.
+   If a rule is system-wide rather than feature-specific, promote it to
+   `INVARIANTS.md` and link the contract.
+
+4. **Build with the contracts in context.** The agent (Cursor, Claude Code,
+   Codex) reads `.verification/` through the pointer files, so the contracts
+   act as design inputs and prevent violations up front.
+
+5. **Verify the pull request against the contracts.** Run the tests and evals
+   the contracts name. Any contract whose scorecard triggers an escalation
+   (high criticality, irreversible, low LLM confidence, or a state-mutating
+   medium+ surface) requires human review before merge.
+
+6. **Merge only when the contracts pass.** If a check fails, it loops back to
+   the builder. Log any deliberate shortcut as production debt with its real
+   fix, so nothing silent reaches production.
+
+In one line: rationalize the task, write its invariants as contracts, sort each
+into a machine check or an LLM judgment, build with the contracts in context,
+then verify the pull request against those same contracts before merge.
+
 ## The three modes
 
 The verification rigor required depends on the project's mode, set in `.verification/MODE.md`:
