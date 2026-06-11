@@ -117,63 +117,47 @@ then verify the pull request against those same contracts before merge.
 
 ## How much can the agent do?
 
-The agent can help with every step of the workflow, and that is the point.
-Comprehensive verification is only affordable because agents removed the effort
-wall to writing it. The rule that keeps this honest: the check must stay
-independent of the build. If a single agent rationalizes the task, writes the
-contracts, builds the feature, and then verifies it in one unbroken pass, the
-grader and the student are the same. Keep them separate, and keep a human at the
-high-stakes gates.
+The agent can help with every step. The one rule that keeps it honest: the
+check must stay independent of the build. If a single agent rationalizes the
+task, writes the contracts, builds the feature, and then verifies it in one
+pass, it is grading its own work. Split the roles across separate sessions, one
+to rationalize and write contracts, one to build, one to verify, and keep a
+human at the high-stakes gates.
 
-Where the agent helps at each step:
+What the agent does at each step, and what you keep:
 
-1. **Rationalize.** Strong use. The agent reads the existing code, design, and
-   data and surfaces conflicts, duplicate patterns, and risks. It only reasons
-   over what is in its context, and it sounds equally confident when guessing,
-   so you sanity-check what it flagged and what it may have missed. This is what
-   the `LLM confidence` scorecard axis is for.
-2. **Write the contracts.** The agent drafts the contract files and proposes the
-   scorecard. Ratify `criticality` yourself, because criticality encodes
-   business stakes the model does not own.
-3. **Score and write the checks.** The agent proposes the deterministic-versus-
-   `eval` split and can write the lint rules, property tests, and eval rubrics.
-   Watch tests that judge the agent's own code: an agent can write a weak test
-   that passes trivially. General deterministic rules resist this; output-
-   specific tests get a human read.
-4. **Build.** The builder. Putting the contracts in context makes it produce
-   more compliant code up front.
-5. **Verify.** The danger zone. An agent judging an agent's output, especially
-   the same model, shares blind spots and leans toward passing. Deterministic
-   checks are trustworthy because they pass or fail mechanically with no model
-   opinion at check time. For checks that genuinely need an `eval`, use a
-   different model as the judge or add a human spot-check. The escalation rules
-   force a human in at the high-stakes points.
-6. **Merge and log debt.** The agent can draft the production-debt entry, but
-   the merge on a protected `main` and the review of escalated contracts stay
-   human.
+1. **Rationalize.** The agent reads the existing code, design, and data and
+   lists conflicts, duplicate patterns, and risks. It only sees what is in its
+   context and sounds confident even when wrong, so you check what it flagged
+   and what it missed.
+2. **Write the contracts.** The agent drafts the contract files and the
+   scorecard. You set `criticality` yourself, because it depends on business
+   stakes the model does not know.
+3. **Score and write the checks.** The agent proposes which checks are
+   deterministic and which need an `eval`, and can write the lint rules, tests,
+   and rubrics. A test that grades the agent's own code can be written to pass
+   trivially, so you review output-specific tests.
+4. **Build.** The agent builds. Having the contracts in context makes it follow
+   the rules from the start.
+5. **Verify.** An agent checking another agent's output, especially the same
+   model, tends to pass it. Deterministic checks are safe because they pass or
+   fail mechanically. For checks that need an `eval`, use a different model or a
+   human spot-check. Escalated contracts pull in a human.
+6. **Merge and log debt.** The agent can draft the production-debt entry. The
+   merge to a protected `main` and the review of escalated contracts stay human.
 
-Three guardrails make full agent help safe rather than circular:
+Three guardrails:
 
-- **You ratify criticality and escalation calls.** They carry business stakes
+- Set criticality and escalation calls yourself. They depend on business stakes
   the model does not have.
-- **Prefer deterministic checks over judged ones.** A machine test is an
-  independent arbiter; a model judging its own work is not. When you must judge
-  with a model, use a different one or a human spot-check.
-- **Keep a human at the merge gate** for high-criticality, irreversible, and
+- Prefer deterministic checks over agent-judged ones. When you must use a model
+  as judge, use a different model or add a human spot-check.
+- Keep a human at the merge gate for high-criticality, irreversible, and
   state-mutating contracts.
 
-One practical move makes the whole loop safe to hand off: **separate the roles
-into different sessions.** Use one agent to rationalize and write the contracts,
-a second to build, and a third to verify against the contracts. Even with the
-same underlying model, the verifier is not anchored on the builder's reasoning,
-which blunts the self-grading problem. The framework already points this way,
-because the contract is written before and independently of the build, and
-verification is defined by the contract rather than by whoever wrote the code.
-
-The throughline: the more of your checks you push into the deterministic bucket,
-the more of this loop you can hand to the agent with confidence, because the
-final word belongs to a machine test instead of the model's opinion of its own
-work.
+The more checks you make deterministic, the more of the loop you can hand to the
+agent, because a machine test has the final say instead of the model judging
+itself.
 
 ## The three modes
 
