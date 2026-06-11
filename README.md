@@ -12,7 +12,7 @@ The premise: tests, contracts, and eval baselines are *design inputs*, not desig
 - **`.cursorrules`** — points Cursor at the operating contract.
 - **`.github/copilot-instructions.md`** — points GitHub Copilot at the operating contract.
 
-All the tool-pointer files at the root say the same thing: *read `.verification/_meta/PROMPT.md`*. That keeps the methodology in one place and lets any tool participate.
+All the tool-pointer files at the root say the same thing: *read `.verification/_meta/PROMPT.md`*.
 
 ## How to use this template
 
@@ -67,7 +67,7 @@ Your project is now under verification-first methodology.
 
 ### Applying to an existing project
 
-Applying this methodology to an existing codebase means the LLM will surface a lot of unstated contracts. That's good — it's a forcing function for documenting institutional knowledge — but it takes time. Consider starting in `spike` mode and promoting to `product` once the contract list stabilizes.
+Applying this methodology to an existing codebase means the LLM will surface a lot of unstated contracts. It's a forcing function for documenting institutional knowledge. Consider starting in `spike` mode and promoting to `product` once the contract list stabilizes.
 
 ### To evolve the methodology
 
@@ -75,10 +75,13 @@ The methodology is itself versioned in `.verification/`. If you find a case wher
 
 ## Example workflow
 
-This is the day-to-day loop once the framework is installed. The example is a
-single feature, but the same loop applies to any unit of work.
+Rationalize the task, write its invariants as contracts, sort each
+into a machine check or an LLM judgment, build with the contracts in context,
+then verify the pull request against those same contracts before merge.
 
-Say the next task is "add a CSV export to the reports page."
+The example is a single feature, but the same loop applies to any unit of work.
+
+Task: "add a CSV export to the reports page."
 
 1. **Rationalize the task.** Read it against the existing code, design, and
    data before writing anything. Ask: does it duplicate an existing pattern,
@@ -111,15 +114,10 @@ Say the next task is "add a CSV export to the reports page."
    the builder. Log any deliberate shortcut as production debt with its real
    fix, so nothing silent reaches production.
 
-In one line: rationalize the task, write its invariants as contracts, sort each
-into a machine check or an LLM judgment, build with the contracts in context,
-then verify the pull request against those same contracts before merge.
-
 ## How much can the agent do?
 
-The agent can help with every step. The one rule that keeps it honest: the
-check must stay independent of the build. If a single agent rationalizes the
-task, writes the contracts, builds the feature, and then verifies it in one
+The agent can help with every step as long as the check must stay independent of the build. 
+If a single agent rationalizes the task, writes the contracts, builds the feature, and then verifies it in one
 pass, it is grading its own work. Split the roles across separate sessions, one
 to rationalize and write contracts, one to build, one to verify, and keep a
 human at the high-stakes gates.
